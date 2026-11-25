@@ -1,0 +1,40 @@
+spring:
+  application:
+    name: workflow-engine
+
+  profiles:
+    active: dev-h2
+
+    group:
+      dev-h2:
+        - dev
+        - h2
+
+      dev-pg:
+        - dev
+        - pg
+
+      dev-memory:
+        - dev
+        - memory
+
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    operations-sorter: method
+
+workflow:
+  security:
+    api-keys:
+      - ${WORKFLOW_API_KEY_1:}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, prometheus
+  endpoint:
+    prometheus:
+      enabled: true

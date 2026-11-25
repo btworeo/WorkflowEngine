@@ -1,0 +1,129 @@
+package com.newen.workflowEngine.application.usecase.queries;
+
+import java.util.List;
+import java.util.UUID;
+
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.Test;
+
+import com.newen.workflowEngine.application.facade.WorkflowTransitionFacade;
+import com.newen.workflowEngine.application.port.EventPublisher;
+import com.newen.workflowEngine.domain.model.execution.WorkflowExecution;
+import com.newen.workflowEngine.domain.model.execution.WorkflowExecutionId;
+import com.newen.workflowEngine.domain.model.workflow.State;
+import com.newen.workflowEngine.domain.model.workflow.Transition;
+import com.newen.workflowEngine.domain.model.workflow.Workflow;
+import com.newen.workflowEngine.domain.model.workflow.WorkflowId;
+import com.newen.workflowEngine.domain.service.WorkflowEngine;
+import com.newen.workflowEngine.infrastructure.persistence.repository.memory.InMemoryWorkflowExecutionRepository;
+import com.newen.workflowEngine.infrastructure.persistence.repository.memory.InMemoryWorkflowRepository;
+
+
+public class CanTransitionUseCaseTest {
+
+    @Test
+    void should_return_true_when_transition_is_allowed() {
+    
+        State created = new State("created", "CREATED", false);
+        State review = new State("review", "REVIEW", false);
+    
+        Workflow workflow = new Workflow(
+                new WorkflowId(UUID.randomUUID()),
+                "Workflow",
+                List.of(created, review),
+                List.of(
+                        new Transition(created, review)
+                ),
+                created
+        );
+    
+        WorkflowExecution execution = new WorkflowExecution(
+                new WorkflowExecutionId(UUID.randomUUID()),
+                workflow.getId(),
+                created
+        );
+    
+        InMemoryWorkflowRepository workflowRepo =
+                new InMemoryWorkflowRepository();
+    
+        workflowRepo.save(workflow);
+    
+        InMemoryWorkflowExecutionRepository executionRepo =
+                new InMemoryWorkflowExecutionRepository();
+    
+        executionRepo.save(execution);
+    
+        EventPublisher noopPublisher = event -> {};
+
+        WorkflowTransitionFacade facade = new WorkflowTransitionFacade(
+                workflowRepo, 
+                executionRepo, 
+                new WorkflowEngine(),
+                noopPublisher
+        );
+
+        CanTransitionUseCase useCase = new CanTransitionUseCase(facade);
+            
+        boolean result =
+                useCase.execute(
+                        execution.getId(),
+                        "review"
+                );
+            
+        assertTrue(result);
+    }
+    
+    @Test
+    void should_return_false_when_transition_is_not_allowed() {
+    
+        State created = new State("created", "CREATED", false);
+        State review = new State("review", "REVIEW", false);
+        State approved = new State("approved", "APPROVED", true);
+    
+        Workflow workflow = new Workflow(
+                new WorkflowId(UUID.randomUUID()),
+                "Workflow",
+                List.of(created, review, approved),
+                List.of(
+                        new Transition(created, review)
+                ),
+                created
+        );
+    
+        WorkflowExecution execution = new WorkflowExecution(
+                new WorkflowExecutionId(UUID.randomUUID()),
+                workflow.getId(),
+                created
+        );
+    
+        InMemoryWorkflowRepository workflowRepo =
+                new InMemoryWorkflowRepository();
+    
+        workflowRepo.save(workflow);
+    
+        InMemoryWorkflowExecutionRepository executionRepo =
+                new InMemoryWorkflowExecutionRepository();
+    
+        executionRepo.save(execution);
+    
+        EventPublisher noopPublisher = event -> {};
+
+        WorkflowTransitionFacade facade = new WorkflowTransitionFacade(
+                workflowRepo, 
+                executionRepo, 
+                new WorkflowEngine(),
+                noopPublisher
+        );
+
+        CanTransitionUseCase useCase = new CanTransitionUseCase(facade);
+            
+        boolean result =
+                useCase.execute(
+                        execution.getId(),
+                        "approved"
+                );
+            
+        assertFalse(result);
+    }
+}

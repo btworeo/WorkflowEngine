@@ -1,0 +1,96 @@
+.shell-nav {
+  display: flex;
+  align-items: center;
+  gap: var(--we-spacing-lg, 24px);
+  padding: 0 var(--we-spacing-lg, 24px);
+  height: 56px;
+  background: var(--we-bg, #ffffff);
+  border-bottom: 1px solid var(--we-border, #e0e0e0);
+  position: sticky;
+  top: 0;
+  z-index: var(--we-z-sticky, 100);
+  font-family: var(--we-font-family, system-ui, -apple-system, sans-serif);
+}
+
+.shell-nav__brand {
+  display: flex;
+  align-items: center;
+  gap: var(--we-spacing-sm, 8px);
+  text-decoration: none;
+  color: var(--we-text, #212121);
+  font-weight: 700;
+  font-size: var(--we-font-size-lg, 1.1rem);
+  margin-right: auto;
+}
+
+.shell-nav__icon {
+  font-size: 1.2rem;
+}
+
+.shell-nav__links {
+  display: flex;
+  align-items: center;
+  gap: var(--we-spacing-xs, 4px);
+}
+
+.shell-nav__link {
+  padding: var(--we-spacing-sm, 8px) var(--we-spacing, 16px);
+  border-radius: var(--we-border-radius, 8px);
+  text-decoration: none;
+  color: var(--we-text-secondary, #757575);
+  font-size: var(--we-font-size-base, 0.9rem);
+  font-weight: 500;
+  transition: background var(--we-transition, 0.15s), color var(--we-transition, 0.15s);
+}
+
+.shell-nav__link:hover {
+  background: var(--we-bg-secondary, #f5f5f5);
+  color: var(--we-text, #212121);
+}
+
+.shell-nav__link--active {
+  color: var(--we-primary, #1976d2);
+  background: var(--we-primary-alpha-low, rgba(25, 118, 210, 0.08));
+  font-weight: 600;
+}
+
+.shell-nav__link--active:hover {
+  background: var(--we-primary-alpha-mid, rgba(25, 118, 210, 0.12));
+}
+
+.shell-btn {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--we-spacing-sm, 8px) 18px;
+  border-radius: var(--we-border-radius, 8px);
+  font-size: var(--we-font-size-base, 0.9rem);
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background var(--we-transition, 0.15s);
+  white-space: nowrap;
+}
+
+.shell-btn--primary {
+  background: var(--we-primary, #1976d2);
+  color: #ffffff;
+  border: none;
+}
+
+.shell-btn--primary:hover {
+  background: var(--we-primary-hover, #1565c0);
+}
+
+.shell-btn--primary:focus-visible {
+  outline: 2px solid var(--we-primary, #1976d2);
+  outline-offset: 2px;
+}
+
+.shell-container {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: var(--we-spacing, 16px);
+  font-family: var(--we-font-family, system-ui, -apple-system, sans-serif);
+  color: var(--we-text, #212121);
+}

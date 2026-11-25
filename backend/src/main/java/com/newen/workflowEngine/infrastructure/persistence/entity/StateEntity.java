@@ -1,0 +1,79 @@
+package com.newen.workflowEngine.infrastructure.persistence.entity;
+
+import java.util.UUID;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
+
+@Entity
+@Table(name = "state", uniqueConstraints = {
+    @UniqueConstraint(
+        name = "uk_state_workflow_code",
+        columnNames = {"workflow_id", "code"}
+    )
+})
+public class StateEntity {
+
+    @Id
+    @GeneratedValue
+    @Column(updatable = false)
+    private UUID id;
+
+    @Column(nullable = false)
+    private String code;
+
+    @Column(nullable = false)
+    private String name;
+
+    private boolean terminal;
+
+    @ManyToOne
+    @JoinColumn(name = "workflow_id")
+    private WorkflowEntity workflow;
+
+    public UUID getId() {
+        return id;
+    }
+
+    public String getCode() { 
+        return code; 
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public boolean isTerminal() {
+        return terminal;
+    }
+
+    public WorkflowEntity getWorkflow() {
+        return workflow;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    public void setCode(String code) { 
+        this.code = code; 
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setTerminal(boolean terminal) {
+        this.terminal = terminal;
+    }
+
+    public void setWorkflow(WorkflowEntity workflow) {
+        this.workflow = workflow;
+    }
+}

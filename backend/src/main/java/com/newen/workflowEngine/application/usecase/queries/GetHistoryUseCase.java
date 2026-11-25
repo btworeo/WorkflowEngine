@@ -1,0 +1,34 @@
+package com.newen.workflowEngine.application.usecase.queries;
+
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.newen.workflowEngine.application.port.WorkflowExecutionRepository;
+import com.newen.workflowEngine.domain.event.StateChanged;
+import com.newen.workflowEngine.domain.exception.WorkflowExecutionNotFoundException;
+import com.newen.workflowEngine.domain.model.execution.WorkflowExecution;
+import com.newen.workflowEngine.domain.model.execution.WorkflowExecutionId;
+
+@Service
+public class GetHistoryUseCase {
+
+    private final WorkflowExecutionRepository executionRepository;
+
+    public GetHistoryUseCase(
+            WorkflowExecutionRepository executionRepository
+    ) {
+        this.executionRepository = executionRepository;
+    }
+
+    @Transactional(readOnly = true)
+    public List<StateChanged> execute(WorkflowExecutionId executionId) {
+
+        WorkflowExecution execution =
+                executionRepository.findById(executionId)
+                .orElseThrow(() -> new WorkflowExecutionNotFoundException("Execution not found"));
+
+        return execution.getHistory();
+    }
+}
